@@ -245,3 +245,12 @@ resource "aws_db_instance" "lab_db" {
     Name = "lab-platform-db"
   }
 }
+resource "aws_sns_topic" "alerts" {
+  name = "lab-platform-alerts"
+}
+
+resource "aws_sns_topic_subscription" "email_alert" {
+  topic_arn = aws_sns_topic.alerts.arn
+  protocol  = "email"
+  endpoint  = "sweda2280@gmail.com"
+}

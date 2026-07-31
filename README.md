@@ -62,8 +62,6 @@ automated backups, and cost-aware resource choices.
 
 
 
-\## Status
-
 
 
 \- \[x] Terraform pipeline validated (init/plan/apply/destroy)
@@ -72,13 +70,11 @@ automated backups, and cost-aware resource choices.
 
 \- \[x] Compute layer (Auto Scaling Group + Application Load Balancer)
 
-\- \[ ] Database layer (RDS in private subnet, automated backups)
+\- \[x] Database layer (RDS in private subnet, automated backups, no public access)
 
-\- \[ ] Monitoring and alerting (CloudWatch)
+\- \[x] Monitoring and alerting (CloudWatch alarm + SNS email notification)
 
 \- \[ ] CI/CD pipeline (GitHub Actions running Terraform plan/apply)
-
-
 
 \## Live Demo
 
