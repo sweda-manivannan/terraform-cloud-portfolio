@@ -99,7 +99,7 @@ ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["80.233.52.234/32"]
   }
 
   egress {

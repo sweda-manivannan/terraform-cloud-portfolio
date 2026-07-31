@@ -62,17 +62,41 @@ automated backups, and cost-aware resource choices.
 
 
 
+\## Status
+
+
+
 \- \[x] Terraform pipeline validated (init/plan/apply/destroy)
 
-\- \[ ] VPC with public and private subnets
+\- \[x] VPC with public and private subnets (multi-AZ)
 
-\- \[ ] Compute layer (Auto Scaling Group + Application Load Balancer)
+\- \[x] Compute layer (Auto Scaling Group + Application Load Balancer)
 
 \- \[ ] Database layer (RDS in private subnet, automated backups)
 
 \- \[ ] Monitoring and alerting (CloudWatch)
 
 \- \[ ] CI/CD pipeline (GitHub Actions running Terraform plan/apply)
+
+
+
+\## Live Demo
+
+http://lab-platform-alb-992528692.eu-west-1.elb.amazonaws.com
+
+
+
+\## Security Notes
+
+\- SSH access (port 22) was temporarily open to all IPs for debugging during
+
+&#x20; development, then restricted to a single trusted IP once debugging was
+
+&#x20; complete — a deliberate before/after decision, not an oversight.
+
+\- Private subnet has no route to the internet, isolating future database
+
+&#x20; resources from public access.
 
 
 
