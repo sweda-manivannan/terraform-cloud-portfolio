@@ -1,0 +1,37 @@
+from flask import Flask, render_template_string
+
+app = Flask(__name__)
+
+sample_data = [
+    {"id": "EXP-1042", "test": "Microbial Contamination Screen", "status": "Completed", "date": "2026-07-18"},
+    {"id": "EXP-1043", "test": "HPLC Purity Assay", "status": "In Progress", "date": "2026-07-20"},
+    {"id": "EXP-1044", "test": "Stability Study - Batch 12", "status": "Completed", "date": "2026-07-21"},
+]
+
+TEMPLATE = """
+<html>
+<head><title>Lab Data Tracking Platform</title></head>
+<body style="font-family: Arial; margin: 40px;">
+  <h1>Lab Data Tracking Dashboard</h1>
+  <p>Demo application — deployed on AWS via Terraform (Auto Scaling + Load Balancer)</p>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <tr><th>Experiment ID</th><th>Test</th><th>Status</th><th>Date</th></tr>
+    {% for row in data %}
+    <tr>
+      <td>{{ row.id }}</td>
+      <td>{{ row.test }}</td>
+      <td>{{ row.status }}</td>
+      <td>{{ row.date }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>
+"""
+
+@app.route("/")
+def home():
+    return render_template_string(TEMPLATE, data=sample_data)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
