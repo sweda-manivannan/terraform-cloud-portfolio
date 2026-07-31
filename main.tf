@@ -52,6 +52,47 @@ resource "aws_subnet" "private_subnet" {
     Name = "lab-platform-private-subnet"
   }
 }
+resource "aws_subnet" "private_subnet_b" {
+  vpc_id            = aws_vpc.lab_platform_vpc.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = "eu-west-1b"
+
+  tags = {
+    Name = "lab-platform-private-subnet-b"
+  }
+}
+resource "aws_db_subnet_group" "db_subnet_group" {
+  name       = "lab-platform-db-subnet-group"
+  subnet_ids = [aws_subnet.private_subnet.id, aws_subnet.private_subnet_b.id]
+
+  tags = {
+    Name = "lab-platform-db-subnet-group"
+  }
+}
+resource "aws_security_group" "db_sg" {
+  name        = "lab-platform-db-sg"
+  description = "Allow database access only from web servers"
+  vpc_id      = aws_vpc.lab_platform_vpc.id
+
+  ingress {
+    description     = "MySQL from web security group only"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.web_sg.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "lab-platform-db-sg"
+  }
+}
 
 resource "aws_internet_gateway" "lab_platform_igw" {
   vpc_id = aws_vpc.lab_platform_vpc.id
@@ -183,5 +224,24 @@ resource "aws_lb_listener" "web_listener" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.web_tg.arn
+  }
+}
+resource "aws_db_instance" "lab_db" {
+  identifier              = "lab-platform-db"
+  engine                  = "mysql"
+  engine_version          = "8.0"
+  instance_class          = "db.t3.micro"
+  allocated_storage       = 20
+  db_name                 = "labplatform"
+  username                = "admin"
+  password                = var.db_password
+  db_subnet_group_name    = aws_db_subnet_group.db_subnet_group.name
+  vpc_security_group_ids  = [aws_security_group.db_sg.id]
+  skip_final_snapshot     = true
+  publicly_accessible     = false
+  backup_retention_period = 1
+
+  tags = {
+    Name = "lab-platform-db"
   }
 }
